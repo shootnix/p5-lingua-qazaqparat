@@ -1,12 +1,15 @@
 package Lingua::Qazaqparat;
 
-use 5.006;
+use 5.010;
 use strict;
 use warnings;
+use utf8;
+
+use Carp qw/carp croak/;
 
 =head1 NAME
 
-Lingua::Qazaqparat - The great new Lingua::Qazaqparat!
+Lingua::Qazaqparat - Kazakh language transliteration module
 
 =head1 VERSION
 
@@ -16,37 +19,106 @@ Version 0.01
 
 our $VERSION = '0.01';
 
+my %ENCODE_MAP = (
+	'А' => 'A',  'а' => 'a',
+	'Ә' => 'Ä',  'ә' => 'ä',
+	'Б' => 'B',  'б' => 'b',
+	'В' => 'V',  'в' => 'v',
+	'Г' => 'G',  'г' => 'g',
+	'Ғ' => 'Ğ',  'ғ' => 'ğ',
+	'Д' => 'D',  'д' => 'd',
+	'Е' => 'E',  'е' => 'e',
+	'Ё' => 'Yo', 'ё' => 'yo',
+	'Ж' => 'J',  'ж' => 'j',
+	'З' => 'Z',  'з' => 'z',
+	'И' => 'Ï ', 'и' => 'ï',
+	'Й' => 'Y',  'й' => 'y',
+	'К' => 'K',  'к' => 'k',
+	'Қ' => 'Q',  'қ' => 'q',
+	'Л' => 'L',  'л' => 'l',
+	'М' => 'M',  'м' => 'm',
+	'Н' => 'N',  'н' => 'n',
+	'Ң' => 'Ñ',  'ң' => 'ñ',
+	'О' => 'O',  'о' => 'o',
+	'Ө' => 'Ö',  'ө' => 'ö',
+	'П' => 'P',  'п' => 'p',
+	'Р' => 'R',  'р' => 'r',
+	'С' => 'S',  'с' => 's',
+	'Т' => 'T',  'т' => 't',
+	'У' => 'W',  'у' => 'w',
+	'Ұ' => 'U',  'ұ' => 'u',
+	'Ү' => 'Ü',  'ү' => 'ü',
+	'Ф' => 'F',  'ф' => 'f',
+	'Х' => 'X',  'х' => 'x',
+	'Һ' => 'H',  'һ' => 'h',
+	'Ц' => 'C',  'ц' => 'c',
+	'Ч' => 'Ç',  'ч' => 'ç',
+	'Ш' => 'Ş',  'ш' => 'ş',
+	'Щ' => 'Şş', 'щ' => 'şş',
+	'Ъ' => 'ʺ',  'ъ' => 'ʺ',
+	'Ы' => 'I',  'ы' => 'ı',
+	'І' => 'İ',  'і' => 'i',
+	'Ь' => 'ʹ',  'ь' => 'ʹ',
+	'Э' => 'E',  'э' => 'e',
+	'Ю' => 'Yu', 'ю' => 'yu',
+	'Я' => 'Ya', 'я' => 'ya',
+);
+
+my %DECODE_MAP = reverse %ENCODE_MAP;
+
 
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
 
-Perhaps a little code snippet.
+    use Lingua::Qazaqparat qw/in out/;
 
-    use Lingua::Qazaqparat;
+	say in(\$cyrillic_string); # out is qazaqparat
 
-    my $foo = Lingua::Qazaqparat->new();
-    ...
 
-=head1 EXPORT
+=head1 SUBROUTINES
 
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
+=head2 in
 
-=head1 SUBROUTINES/METHODS
-
-=head2 function1
+Takes cyrillic alphabet, returns qazaqparat
 
 =cut
 
-sub function1 {
+sub in {
+	my ($str) = @_;
+
+	ref $str or croak "Argument must be a reference";
+	my @letters = split q//, $$str;
+
+	my $resultstr = q//;
+
+	LETTER:
+	for (@letters) {
+		$resultstr .= defined $ENCODE_MAP{$_} ? $ENCODE_MAP{$_} : $_;
+	}
+
+	return $resultstr;
 }
 
-=head2 function2
+=head2 out
+
+Takes qazaqparat, returns cyrillic
 
 =cut
 
-sub function2 {
+sub out {
+	my ($str) = @_;
+
+	ref $str or croak "Argument must be a reference";
+	my @letters = split q//, $$str;
+
+	my $resultstr = q//;
+
+	LETTER:
+	for (@letters) {
+		$resultstr .= defined $DECODE_MAP{$_} ? $DECODE_MAP{$_} : $_;
+	}
+
+	return $resultstr;
 }
 
 =head1 AUTHOR
