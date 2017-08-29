@@ -79,7 +79,7 @@ my %DECODE_MAP = reverse %ENCODE_MAP;
 
 =head2 in
 
-Takes cyrillic alphabet, returns qazaqparat
+Takes cyrillic, returns qazaqparat
 
 =cut
 
@@ -87,16 +87,8 @@ sub in {
 	my ($str) = @_;
 
 	ref $str or croak "Argument must be a reference";
-	my @letters = split q//, $$str;
 
-	my $resultstr = q//;
-
-	LETTER:
-	for (@letters) {
-		$resultstr .= defined $ENCODE_MAP{$_} ? $ENCODE_MAP{$_} : $_;
-	}
-
-	return $resultstr;
+	return _transliterate($str, \%ENCODE_MAP);
 }
 
 =head2 out
@@ -109,13 +101,21 @@ sub out {
 	my ($str) = @_;
 
 	ref $str or croak "Argument must be a reference";
-	my @letters = split q//, $$str;
 
+	return _transliterate($str, \%DECODE_MAP);
+}
+
+# Private
+
+sub _transliterate {
+	my ($str, $key_map) = @_;
+
+	my @letters   = split q//, $$str;
 	my $resultstr = q//;
 
 	LETTER:
 	for (@letters) {
-		$resultstr .= defined $DECODE_MAP{$_} ? $DECODE_MAP{$_} : $_;
+		$resultstr .= exists $key_map{$_} ? $key_map{$_} : $_;
 	}
 
 	return $resultstr;
