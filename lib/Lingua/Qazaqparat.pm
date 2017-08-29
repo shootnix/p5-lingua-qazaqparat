@@ -115,7 +115,7 @@ sub _transliterate {
 
 	LETTER:
 	for (@letters) {
-		$resultstr .= exists $key_map{$_} ? $key_map{$_} : $_;
+		$resultstr .= exists $key_map->{$_} ? $key_map->{$_} : $_;
 	}
 
 	return $resultstr;
