@@ -4,10 +4,10 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
-    NAME             => 'Lingua::Qazaqparat',
+    NAME             => 'Lingua::Qaz',
     AUTHOR           => q{Alexander Ponomarev <shootnix@cpan.org>},
-    VERSION_FROM     => 'lib/Lingua/Qazaqparat.pm',
-    ABSTRACT_FROM    => 'lib/Lingua/Qazaqparat.pm',
+    VERSION_FROM     => 'lib/Lingua/Qaz.pm',
+    ABSTRACT_FROM    => 'lib/Lingua/Qaz.pm',
     LICENSE          => 'artistic_2',
     PL_FILES         => {},
     MIN_PERL_VERSION => '5.006',
@@ -22,5 +22,5 @@ WriteMakefile(
         #'Foo::Bar::Module' => '5.0401',
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean => { FILES => 'Lingua-Qazaqparat-*' },
+    clean => { FILES => 'Lingua-Qaz-*' },
 );

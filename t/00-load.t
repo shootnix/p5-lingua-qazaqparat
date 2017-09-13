@@ -7,7 +7,7 @@ use Test::More;
 plan tests => 1;
 
 BEGIN {
-    use_ok( 'Lingua::Qazaqparat' ) || print "Bail out!\n";
+    use_ok( 'Lingua::Qaz' ) || print "Bail out!\n";
 }
 
-diag( "Testing Lingua::Qazaqparat $Lingua::Qazaqparat::VERSION, Perl $], $^X" );
+diag( "Testing Lingua::Qaz $Lingua::Qaz::VERSION, Perl $], $^X" );

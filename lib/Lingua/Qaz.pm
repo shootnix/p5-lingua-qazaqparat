@@ -1,4 +1,4 @@
-package Lingua::Qazaqparat;
+package Lingua::Qaz;
 
 use 5.010;
 use strict;
@@ -9,17 +9,17 @@ use Carp qw/carp croak/;
 
 =head1 NAME
 
-Lingua::Qazaqparat - Kazakh language transliteration module
+Lingua::Qaz - Kazakh language transliteration module
 
 =head1 VERSION
 
-Version 0.01
+Version 0.03
 
 =cut
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
-my %ENCODE_MAP = (
+my %QAZAQPARAT = (
 	'А' => 'A',  'а' => 'a',
 	'Ә' => 'Ä',  'ә' => 'ä',
 	'Б' => 'B',  'б' => 'b',
@@ -64,45 +64,83 @@ my %ENCODE_MAP = (
 	'Я' => 'Ya', 'я' => 'ya',
 );
 
-my %DECODE_MAP = reverse %ENCODE_MAP;
-
+my %TLESHOV = (
+	'А' => 'A',  'а' => 'a',
+	'Ә' => 'Ae',  'ә' => 'ae',
+	'Б' => 'B',  'б' => 'b',
+	'В' => 'V',  'в' => 'v',
+	'Г' => 'G',  'г' => 'g',
+	'Ғ' => 'Gh',  'ғ' => 'gh',
+	'Д' => 'D',  'д' => 'd',
+	'Е' => 'E',  'е' => 'e',
+	'Ё' => 'E', 'ё' => 'e',
+	'Ж' => 'Zh',  'ж' => 'zh',
+	'З' => 'Z',  'з' => 'z',
+	'И' => 'I ', 'и' => 'i',
+	'Й' => 'J',  'й' => 'j',
+	'К' => 'K',  'к' => 'k',
+	'Қ' => 'Q',  'қ' => 'q',
+	'Л' => 'L',  'л' => 'l',
+	'М' => 'M',  'м' => 'm',
+	'Н' => 'N',  'н' => 'n',
+	'Ң' => 'Ng',  'ң' => 'ng',
+	'О' => 'O',  'о' => 'o',
+	'Ө' => 'Oe',  'ө' => 'oe',
+	'П' => 'P',  'п' => 'p',
+	'Р' => 'R',  'р' => 'r',
+	'С' => 'S',  'с' => 's',
+	'Т' => 'T',  'т' => 't',
+	'У' => 'W',  'у' => 'w',
+	'Ұ' => 'U',  'ұ' => 'u',
+	'Ү' => 'Ue',  'ү' => 'ue',
+	'Ф' => 'F',  'ф' => 'f',
+	'Х' => 'H',  'х' => 'h',
+	'Һ' => 'H',  'һ' => 'h',
+	'Ц' => 'C',  'ц' => 'c',
+	'Ч' => 'Ch',  'ч' => 'ch',
+	'Ш' => 'Sh',  'ш' => 'sh',
+	'Щ' => 'Shsh', 'щ' => 'shsh',
+	'Ъ' => '',  'ъ' => '',
+	'Ы' => 'Y',  'ы' => 'y',
+	'І' => 'i',  'і' => 'i',
+	'Ь' => '',  'ь' => '',
+	'Э' => 'E',  'э' => 'e',
+	'Ю' => 'Ju', 'ю' => 'ju',
+	'Я' => 'Ja', 'я' => 'ja',
+);
 
 =head1 SYNOPSIS
 
+    use Lingua::Qaz qw/in/;
 
-    use Lingua::Qazaqparat qw/in out/;
-
-	say in(\$cyrillic_string); # out is qazaqparat
+	say in('tleshov', \$cyrillic_string); # out is qaz
 
 
 =head1 SUBROUTINES
 
 =head2 in
 
-Takes cyrillic, returns qazaqparat
+Takes Cyrillic, returns Latin. Argumets: method, string (as a scalar-ref).
+Methods:
+	'tleshov' - official Alphabet
+	'qazaqparat' - Qazaqparat Alphabet
 
 =cut
 
 sub in {
-	my ($str) = @_;
+	my ($method, $str) = @_;
 
 	ref $str or croak "Argument must be a reference";
 
-	return _transliterate($str, \%ENCODE_MAP);
-}
-
-=head2 out
-
-Takes qazaqparat, returns cyrillic
-
-=cut
-
-sub out {
-	my ($str) = @_;
-
-	ref $str or croak "Argument must be a reference";
-
-	return _transliterate($str, \%DECODE_MAP);
+	if ($method eq 'tleshov') {
+		return _transliterate($str, \%TLESHOV);
+	}
+	elsif ($method eq 'qazaqparat') {
+		return _transliterate($str, \%QAZAQPARAT);
+	}
+	else {
+		croak 'Unknown method: ' . $method;
+	}
 }
 
 # Private
@@ -127,8 +165,8 @@ Alexander Ponomarev, C<< <shootnix at cpan.org> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-lingua-qazaqparat at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Lingua-Qazaqparat>.  I will be notified, and then you'll
+Please report any bugs or feature requests to C<bug-lingua-qaz at rt.cpan.org>, or through
+the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Lingua-Qaz>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
 
 
@@ -138,7 +176,7 @@ automatically be notified of progress on your bug as I make changes.
 
 You can find documentation for this module with the perldoc command.
 
-    perldoc Lingua::Qazaqparat
+    perldoc Lingua::Qaz
 
 
 You can also look for information at:
@@ -147,19 +185,19 @@ You can also look for information at:
 
 =item * RT: CPAN's request tracker (report bugs here)
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Lingua-Qazaqparat>
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Lingua-Qaz>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 
-L<http://annocpan.org/dist/Lingua-Qazaqparat>
+L<http://annocpan.org/dist/Lingua-Qaz>
 
 =item * CPAN Ratings
 
-L<http://cpanratings.perl.org/d/Lingua-Qazaqparat>
+L<http://cpanratings.perl.org/d/Lingua-Qaz>
 
 =item * Search CPAN
 
-L<http://search.cpan.org/dist/Lingua-Qazaqparat/>
+L<http://search.cpan.org/dist/Lingua-Qaz/>
 
 =back
 
@@ -210,4 +248,4 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 =cut
 
-1; # End of Lingua::Qazaqparat
+1; # End of Lingua::Qaz
